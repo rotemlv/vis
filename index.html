@@ -4,7 +4,7 @@
 <head>
   <style>
     .dummy_color_selector{
-      fill: #a0cedb;
+      fill: #6e6e6e;
     }
 
     body {
@@ -142,7 +142,7 @@
 </div>
   <script>
 
-    var goalTypeColors = ["#a0cedb","#d4793b", "#146C94"];
+    var goalTypeColors = ["#a0cedb","#d4793b", "#146C94","#ffffff","#6e6e6e", "#6e6e6e"];
     var goalPenaltyColor = goalTypeColors[0];
     var goalOwnColor = goalTypeColors[1];
     var goalColor = goalTypeColors[2];
@@ -369,6 +369,23 @@
           .attr("class", "tooltip")
           .style("font-size", "14px");
 
+          var legendVals = [
+            "Penalty Goals",
+            "Own Goals",
+            "Field Goals",
+            "",
+            "Home Game",
+            "Away Game"
+          ];
+          var legendSymbols = [
+          d3.symbolSquare,
+          d3.symbolSquare,
+          d3.symbolSquare,
+          d3.symbolSquare,
+          d3.symbolCircle,
+          d3.symbolDiamond
+          ];
+
         // Create a legend group
         var legend = svg
           .append("g")
@@ -378,11 +395,7 @@
         // Add legend entries
         var legendEntries = legend
           .selectAll(".legend-entry")
-          .data([
-            "Penalty Goals",
-            "Own Goals",
-            "Field Goals",
-          ]) // Add your category labels here
+          .data(legendVals) // Add your category labels here
           .enter()
           .append("g")
           .attr("class", "legend-entry")
@@ -392,7 +405,11 @@
 
         // Add colored rectangles to represent the categories
         legendEntries
-          .append("rect")
+        .append("path")
+        .attr("d", symbol.type(function (d, i) {
+            return legendSymbols[i]; // Set the corresponding colors here
+          }))
+
           .attr("x", 0)
           .attr("y", 0)
           .attr("width", 10)
