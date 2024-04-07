@@ -116,7 +116,7 @@
     console.log("Year: ", year);
     console.log("Team: ", team);
 
-    d3.csv("data/goalscorers.csv").then(function (data) {
+    d3.csv("./data/goalscorers.csv").then(function (data) {
       var chartTitle = d3.select(".chart-title");
       chartTitle.text("Top-Scorers for " + team + " in " + year);
       // Filter the data based on team and year

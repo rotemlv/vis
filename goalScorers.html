@@ -191,7 +191,7 @@
 
     // the main flow
     function csvFlow(nation, from, to) {
-      d3.csv("data/goalScorers.csv").then(function (data) {
+      d3.csv("./data/goalScorers.csv").then(function (data) {
         // Update the title dynamically when used changes team or years
         var chartTitle = d3.select(".chart-title");
         chartTitle.text("Goals Scored by " + nation);
