@@ -151,7 +151,7 @@
     var GlobalTo = 2024;
     var yearsToShow = 7;
     // Load the CSV file to get the list of nations
-    d3.csv("data/goalscorers.csv").then(function (data) {
+    d3.csv("./data/goalscorers.csv").then(function (data) {
       var nations = Array.from(new Set(data.map((d) => d.team))); // Get unique nations from the data
 
       // Populate the datalist with nation options
