@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    .scorer-label {
+      fill: black;
+      /* Change text color to black */
+    }
+
+    svg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .chart-title {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+      color: black;
+      /* Change font color to black */
+    }
+
+    body {
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .tooltip {
+      position: absolute;
+      background-color: white;
+      border: 1px solid black;
+      padding: 10px;
+      pointer-events: none;
+    }
+
+    .instruction-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin-top: 20px;
+      margin-left: 70px;
+      font-size: 16px;
+      font-style: bold;
+      color: rgb(0, 0, 0);
+      border: 1px solid #000000;
+      padding: 10px;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .chart-title {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 20px;
+      color: #333;
+    }
+
+    .tooltip {
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #333;
+      padding: 10px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .bar {
+      fill: steelblue;
+    }
+
+    .bar:hover {
+      fill: #666;
+    }
+
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #000;
+      shape-rendering: crispEdges;
+    }
+
+    .axis text {
+      font-size: 12px;
+    }
+
+    .axis-label {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Top Scorers</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
+</head>
+
+<body>
+  <h1 class="chart-title">Top-Scorers for Nation in year</h1>
+
+  <script>
+    // Get the URL parameters
+    var urlParams = new URLSearchParams(window.location.search);
+    var year = urlParams.get("year");
+    var team = urlParams.get("team");
+    console.log("Year: ", year);
+    console.log("Team: ", team);
+
+    d3.csv("data/goalscorers.csv").then(function (data) {
+      var chartTitle = d3.select(".chart-title");
+      chartTitle.text("Top-Scorers for " + team + " in " + year);
+      // Filter the data based on team and year
+      var filteredData = data.filter(function (d) {
+        var dateYear = parseInt(d.date.split("/")[0]);
+        return d.team === team && dateYear === parseInt(year);
+      });
+      console.log(filteredData);
+
+      // Count the number of appearances for each scorer
+
+      var scorerData = {};
+
+      filteredData.forEach(function (d) {
+        var scorer = d.scorer;
+        if (scorerData[scorer]) {
+          scorerData[scorer].push(d);
+        } else {
+          scorerData[scorer] = [d];
+        }
+      });
+
+      // Convert the scorerData object into an array of objects
+      var scorerDataArray = Object.keys(scorerData).map(function (scorer) {
+        return { scorer: scorer, rows: scorerData[scorer] };
+      });
+
+      // Sort the array of objects based on the array length in descending order
+      scorerDataArray.sort(function (a, b) {
+        return b.rows.length - a.rows.length;
+      });
+
+      // Take the first 10 scorers
+      var top10Scorers = scorerDataArray.slice(0, 10);
+
+      // Create a new object to store the filtered data
+      var top10ScorersData = {};
+
+      // Iterate over the top 10 scorers and retrieve the scorer names and rows
+      top10Scorers.forEach(function (scorerObj) {
+        var scorer = scorerObj.scorer;
+        var rows = scorerObj.rows;
+        // Assign the rows to the top10ScorersData object using the scorer name as the key
+        top10ScorersData[scorer] = rows;
+      });
+      // Use the top10ScorersData object and the associated rows for further processing or visualization
+
+      console.log("Top 10 Scorers Data:", top10ScorersData);
+      console.log("Top 10 Scorers :", top10Scorers);
+      var maxGoals = top10Scorers.reduce(function(max, scorer) {
+ return Math.max(max, scorer.rows.length);
+}, 0);
+      //Define the chart dimensions and create an SVG element
+      var margin = { top: 20, right: 20, bottom: 20, left: 20 };
+      var width = 1200 - margin.left - margin.right;
+      var height = 600 - margin.top - margin.bottom;
+      // Define the scales
+      var xScale = d3.scaleBand()
+        .domain(top10Scorers.map(function (d) { return d.scorer; }))
+        .range([0, width])
+        .padding(0.2);
+
+      var yScale = d3.scaleLinear()
+        .domain([0, d3.max(top10Scorers, function (d) { return d.rows.length; })])
+        .range([height, 0])
+        .nice(); // This ensures the scale is rounded to the nearest whole number
+
+      // Adjust the y-axis to only show whole numbers
+      var yAxis = d3.axisLeft(yScale).ticks(maxGoals); // Ensures whole numbers
+
+      // Define the SVG element
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Create the bars
+      svg.selectAll(".bar")
+        .data(top10Scorers)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function (d) { return xScale(d.scorer); })
+        .attr("y", function (d) { return yScale(d.rows.length); })
+        .attr("width", xScale.bandwidth())
+        .attr("height", function (d) { return height - yScale(d.rows.length); })
+        .attr("fill", "steelblue");
+
+      // Add the X Axis
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(xScale));
+
+      // Add the Y Axis with whole numbers
+      svg.append("g")
+        .call(yAxis)
+
+      // Add a simple legend
+      svg.append("text")
+        .attr("x", 0)
+        .attr("y", 18)
+        .attr("text-anchor", "end")
+        .style("font-size", "16px")
+        .style("font-weight", "bold")
+        .attr("transform", "rotate(-90)")
+        .text("Goals Scored");
+
+
+    })
+  </script>
+</body>
+
+</html>
