@@ -339,11 +339,18 @@
           .on("mouseover", function (event, d) {
             // Show the tooltip on mouseover
             var goalType = (d.penalty == "TRUE") ? "Penalty Goal" : (d.own_goal == "TRUE") ? "Own Goal" : "Field Goal";
+            var gameDate = d.date;
+            var day = new Date(gameDate).getDay();
+            var month = new Date(gameDate).getMonth();
+            var year= new Date(gameDate).getFullYear();
+
             tooltip.transition().duration(200).style("opacity", 0.9);
             tooltip
               .html(
                 "Game: " +
                 d.home_team + " vs " + d.away_team +
+                "<br>Date: " +
+                day +"."+month+"."+year +
                 "<br>Minute: " +
                 d.minute +
                 "<br>Goal Scorer: " +
