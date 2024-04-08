@@ -4,7 +4,7 @@
 <head>
   <style>
     .dummy_color_selector {
-      fill: #6e6e6e;
+      fill: #289f2e;
     }
 
     body {
@@ -153,7 +153,7 @@
   </div>
   <script>
 
-    var goalTypeColors = ["#a0cedb", "#d4793b", "#146C94", "#ffffff", "#6e6e6e", "#6e6e6e"];
+    var goalTypeColors = ["#289f2e", "#d4793b", "#146C94", "#ffffff", "#6e6e6e", "#6e6e6e"];
     var goalPenaltyColor = goalTypeColors[0];
     var goalOwnColor = goalTypeColors[1];
     var goalColor = goalTypeColors[2];
@@ -312,8 +312,7 @@
         dots
           .attr('class', 'dots')
           .style("fill", function (d) { return (d.penalty == "TRUE") ? goalPenaltyColor : (d.own_goal == "TRUE") ? goalOwnColor : goalColor })
-
-          .style("opacity", "0.7")
+          .style("opacity", "0.9")
           .attr("stroke", "black")
           .attr("d", symbol.type(function (d) { return (d.home_team == GlobalCountry) ? d3.symbolCircle : d3.symbolDiamond }).size(150))
           .attr("transform", function (d) {
@@ -339,7 +338,7 @@
 
           .on("mouseover", function (event, d) {
             // Show the tooltip on mouseover
-            var goalType = (d.penalty == "TRUE") ? "Penalty Goal" : (d.own_goa == "TRUE") ? "Own Goal" : "Field Goal";
+            var goalType = (d.penalty == "TRUE") ? "Penalty Goal" : (d.own_goal == "TRUE") ? "Own Goal" : "Field Goal";
             tooltip.transition().duration(200).style("opacity", 0.9);
             tooltip
               .html(
