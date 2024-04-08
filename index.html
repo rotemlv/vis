@@ -3,12 +3,13 @@
 
 <head>
   <style>
-    .dummy_color_selector{
+    .dummy_color_selector {
       fill: #6e6e6e;
     }
 
     body {
-      font-family: Arial, sans-serif; /* Define the font family for the entire document */
+      font-family: Arial, sans-serif;
+      /* Define the font family for the entire document */
     }
 
     svg {
@@ -41,14 +42,17 @@
     }
 
     .tooltip {
- position: absolute;
- pointer-events: none;
- opacity: 0;
- background-color: #fff;
- border: 1px solid #ccc;
- padding: 10px; /* Adjust this value to add padding uniformly on all sides */
- box-sizing: border-box; /* Ensures padding is included in the total width and height */
-}
+      position: absolute;
+      pointer-events: none;
+      opacity: 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      /* Adjust this value to add padding uniformly on all sides */
+      box-sizing: border-box;
+      /* Ensures padding is included in the total width and height */
+    }
+
     .button-container {
       position: absolute;
       bottom: 0;
@@ -75,48 +79,55 @@
     }
 
     .search-and-buttons-container {
- display: flex;
- justify-content: center;
- align-items: center;
- flex-direction: column;
- gap: 20px; /* Adjust the gap between the search bar and buttons */
- margin-bottom: 20px; /* Add some space between the search bar and the visualization */
-}
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 20px;
+      /* Adjust the gap between the search bar and buttons */
+      margin-bottom: 20px;
+      /* Add some space between the search bar and the visualization */
+    }
 
-.search-container {
- display: flex;
- justify-content: center;
- align-items: center;
- gap: 10px; /* Adjust the gap between the input and the button */
-}
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      /* Adjust the gap between the input and the button */
+    }
 
-.search-container input {
- width: 300px; /* Adjust the width of the search input */
- height: 40px; /* Adjust the height of the search input */
- padding: 5px;
- font-size: 16px; /* Adjust the font size */
-}
+    .search-container input {
+      width: 300px;
+      /* Adjust the width of the search input */
+      height: 40px;
+      /* Adjust the height of the search input */
+      padding: 5px;
+      font-size: 16px;
+      /* Adjust the font size */
+    }
 
-.search-container button {
- padding: 15px 30px; /* Increase padding to make the button larger */
- font-size: 18px; /* Increase font size for better readability */
- width: 100px; /* Set a specific width if you want to control the size more precisely */
- display: flex; /* Use flexbox to center the text */
- justify-content: center; /* Center the text horizontally */
- align-items: center; /* Center the text vertically */
-}
-
-
-
-
+    .search-container button {
+      padding: 15px 30px;
+      /* Increase padding to make the button larger */
+      font-size: 18px;
+      /* Increase font size for better readability */
+      width: 100px;
+      /* Set a specific width if you want to control the size more precisely */
+      display: flex;
+      /* Use flexbox to center the text */
+      justify-content: center;
+      /* Center the text horizontally */
+      align-items: center;
+      /* Center the text vertically */
+    }
   </style>
   <meta charset="utf-8" />
   <title>Goals Scored</title>
   <script src="https://d3js.org/d3.v7.js" charset="utf-8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js" 
-  integrity="sha512-a+/SD0dbGeXTN4AA5F1dDZqsPvXKKyS1bvU2z5ElpKNJ4xQlOMUs/1+suA+j+kj5nAAya+VmT5HUKZmazluxVQ==" 
-  crossorigin="anonymous" 
-  referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"
+    integrity="sha512-a+/SD0dbGeXTN4AA5F1dDZqsPvXKKyS1bvU2z5ElpKNJ4xQlOMUs/1+suA+j+kj5nAAya+VmT5HUKZmazluxVQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -124,25 +135,25 @@
   <h2 class="years-title">Between 2010 - 2022</h2>
   <p class="instruction-text">
     Hover on a shape to display the tooltip<br />
-    Click the shape to go into the top players for that year<br />
+    Click the year (/shape within year) to go into the top players for that year<br />
     Buttons: use previous and next years to slide between the years (interval of 7)
   </p>
   <!-- Search bar -->
   <div class="search-and-buttons-container">
-  <div class="search-container">
-    <input type="text" id="search-input" placeholder="Select Nation" list="nations-list" />
-    <datalist id="nations-list"></datalist>
-    <button onclick="handleSearch()">Search</button>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Select Nation" list="nations-list" />
+      <datalist id="nations-list"></datalist>
+      <button onclick="handleSearch()">Search</button>
+    </div>
+    <!-- Add buttons below the chart -->
+    <div class="button-container">
+      <button onclick="changeYear('previous')">&larr; Previous Years</button>
+      <button onclick="changeYear('next')">Next Years &rarr;</button>
+    </div>
   </div>
-  <!-- Add buttons below the chart -->
-  <div class="button-container">
-    <button onclick="changeYear('previous')">&larr; Previous Years</button>
-    <button onclick="changeYear('next')">Next Years &rarr;</button>
-  </div>
-</div>
   <script>
 
-    var goalTypeColors = ["#a0cedb","#d4793b", "#146C94","#ffffff","#6e6e6e", "#6e6e6e"];
+    var goalTypeColors = ["#a0cedb", "#d4793b", "#146C94", "#ffffff", "#6e6e6e", "#6e6e6e"];
     var goalPenaltyColor = goalTypeColors[0];
     var goalOwnColor = goalTypeColors[1];
     var goalColor = goalTypeColors[2];
@@ -175,7 +186,7 @@
     // Function to handle year change
     function changeYear(direction) {
       if (direction === "previous") {
-      if (GlobalFrom > 1916 + yearsToShow) {
+        if (GlobalFrom > 1916 + yearsToShow) {
           GlobalFrom -= yearsToShow;
           GlobalTo -= yearsToShow;
         }
@@ -183,7 +194,7 @@
         if (GlobalTo < 2024) {
           GlobalFrom += yearsToShow;
           GlobalTo += yearsToShow;
-        } 
+        }
       }
       csvFlow(GlobalCountry, GlobalFrom, GlobalTo);
 
@@ -242,7 +253,7 @@
         // logging
         console.log(goals)
         var years = [];
-        for(var i=GlobalFrom;i<=GlobalTo;i++){
+        for (var i = GlobalFrom; i <= GlobalTo; i++) {
           years.push(i);
         }
         // Create the SVG element and set up the scales
@@ -269,20 +280,23 @@
         // add shapes
         var symbol = d3.symbol();
 
+        // Add text label for X axis
         svg
           .append("text")
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
           .attr("x", width)
           .attr("y", height + margin.top + 10)
-          .text("Years");
+          .text("Years")
+
+          ;
 
         // Add text label for Y axis
         svg
           .append("text")
           .attr("class", "axis-label")
           .attr("text-anchor", "middle")
-          .attr("x", -(margin.left / 2)+10)
+          .attr("x", -(margin.left / 2) + 10)
           .attr("y", height / 2 - 230)
           .attr("dy", "-2.5em")
           .attr("transform", "rotate(-90)")
@@ -297,11 +311,11 @@
 
         dots
           .attr('class', 'dots')
-          .style("fill", function (d) { return (d.penalty=="TRUE") ? goalPenaltyColor : (d.own_goal=="TRUE") ? goalOwnColor : goalColor })
+          .style("fill", function (d) { return (d.penalty == "TRUE") ? goalPenaltyColor : (d.own_goal == "TRUE") ? goalOwnColor : goalColor })
 
           .style("opacity", "0.7")
           .attr("stroke", "black")
-          .attr("d", symbol.type(function (d) { return (d.home_team == GlobalCountry) ? d3.symbolCircle : d3.symbolDiamond } ).size(150))
+          .attr("d", symbol.type(function (d) { return (d.home_team == GlobalCountry) ? d3.symbolCircle : d3.symbolDiamond }).size(150))
           .attr("transform", function (d) {
             // Assuming 'd.year' and 'd.minute' are properties of your data
             // Adjust the x and y calculations based on your actual data structure
@@ -325,17 +339,17 @@
 
           .on("mouseover", function (event, d) {
             // Show the tooltip on mouseover
-            var goalType = (d.penalty=="TRUE")?"Penalty Goal":(d.own_goa=="TRUE")?"Own Goal":"Field Goal";
+            var goalType = (d.penalty == "TRUE") ? "Penalty Goal" : (d.own_goa == "TRUE") ? "Own Goal" : "Field Goal";
             tooltip.transition().duration(200).style("opacity", 0.9);
             tooltip
               .html(
                 "Game: " +
-                d.home_team + " vs " + d.away_team + 
+                d.home_team + " vs " + d.away_team +
                 "<br>Minute: " +
                 d.minute +
                 "<br>Goal Scorer: " +
                 d.scorer +
-                "<br>Goal Type: " + goalType +"\n"
+                "<br>Goal Type: " + goalType + "\n"
 
               )
               .style("left", event.pageX + "px")
@@ -369,28 +383,28 @@
           .attr("class", "tooltip")
           .style("font-size", "14px");
 
-          var legendVals = [
-            "Penalty Goals",
-            "Own Goals",
-            "Field Goals",
-            "",
-            "Home Game",
-            "Away Game"
-          ];
-          var legendSymbols = [
+        var legendVals = [
+          "Penalty Goal",
+          "Own Goal",
+          "Field Goal",
+          "",
+          "Home Game",
+          "Away Game"
+        ];
+        var legendSymbols = [
           d3.symbolSquare,
           d3.symbolSquare,
           d3.symbolSquare,
           d3.symbolSquare,
           d3.symbolCircle,
           d3.symbolDiamond
-          ];
+        ];
 
         // Create a legend group
         var legend = svg
           .append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - 100 ) + ", 0)");
+          .attr("transform", "translate(" + (width - 80) + ", 0)");
 
         // Add legend entries
         var legendEntries = legend
@@ -405,8 +419,8 @@
 
         // Add colored rectangles to represent the categories
         legendEntries
-        .append("path")
-        .attr("d", symbol.type(function (d, i) {
+          .append("path")
+          .attr("d", symbol.type(function (d, i) {
             return legendSymbols[i]; // Set the corresponding colors here
           }))
 
@@ -422,9 +436,26 @@
         legendEntries
           .append("text")
           .attr("x", 15)
-          .attr("y", 10)
+          .attr("y", 5)
           .text(function (d) {
             return d;
+          })
+          .style("font-size", "12px");
+
+
+        // Select the text elements representing the years and add click event listeners
+        svg.selectAll(".tick text")
+          .on("click", function (d) {
+            // d is the year represented by the clicked label
+            console.log("Year clicked:", d.target.__data__);
+            // Here you can implement the logic to navigate to a different page or update the view
+            var url =
+              "teamTopPlayers.html" +
+              "?year=" +
+              encodeURIComponent(d.target.__data__) +
+              "&team=" +
+              encodeURIComponent(GlobalCountry);
+            window.location.href = url;
           });
       });
     }
