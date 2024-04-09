@@ -152,6 +152,17 @@
     </div>
   </div>
   <script>
+// search bar handling
+window.onload = function() {
+    document.getElementById('search-input').value = '';
+ };
+
+ document.getElementById('search-input').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+ });
+
 
     var goalTypeColors = ["#289f2e", "#d4793b", "#146C94", "#ffffff", "#6e6e6e", "#6e6e6e"];
     var goalPenaltyColor = goalTypeColors[0];
@@ -238,8 +249,8 @@
         console.log("Stacked Data:", scoredGoalsData);
 
         // Set up the chart dimensions
-        var margin = { top: 20, right: 20, bottom: 30, left: 40 };
-        var width = 1000 - margin.left - margin.right;
+        var margin = { top: 20, right: 40, bottom: 30, left: 60 };
+        var width = 1100 - margin.left - margin.right;
         var height = 440 - margin.top - margin.bottom;
 
         var goals = [];
@@ -410,7 +421,7 @@
         var legend = svg
           .append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - 80) + ", 0)");
+          .attr("transform", "translate(" + (width - 40) + ", 0)");
 
         // Add legend entries
         var legendEntries = legend
