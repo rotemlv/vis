@@ -172,9 +172,10 @@ window.onload = function() {
     var GlobalFrom = 2018;
     var GlobalTo = 2024;
     var yearsToShow = 7;
+    var nations;
     // Load the CSV file to get the list of nations
     d3.csv("./data/goalscorers.csv").then(function (data) {
-      var nations = Array.from(new Set(data.map((d) => d.team))); // Get unique nations from the data
+      nations = Array.from(new Set(data.map((d) => d.team))); // Get unique nations from the data
 
       // Populate the datalist with nation options
       var datalist = d3.select("#nations-list");
@@ -191,8 +192,14 @@ window.onload = function() {
     function handleSearch() {
       var searchInput = document.getElementById("search-input");
       var query = searchInput.value;
-      GlobalCountry = query;
+      if(nations.includes(query)){
+        GlobalCountry = query;
       loadCsvAndShowVis(query, GlobalFrom, GlobalTo);
+      }
+      else{
+        searchInput.value = "";
+        searchInput.placeholder = "Not a country!";
+      }
     }
     // Function to handle year change
     function changeYear(direction) {
