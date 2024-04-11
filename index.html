@@ -360,10 +360,10 @@ window.onload = function() {
 
             var goalType = (d.penalty == "TRUE") ? "Penalty Goal" : (d.own_goal == "TRUE") ? "Own Goal" : "Field Goal";
             var gameDate = new Date(d.date);
-            var day = gameDate.getDay();
+            var day = gameDate.getDate();
             var month = gameDate.getMonth() + 1;
             var year= gameDate.getFullYear();
-
+            // console.log(year, month, day, gameDate);
             tooltip.transition().duration(200).style("opacity", 0.9);
             tooltip
               .html(
