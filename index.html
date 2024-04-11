@@ -186,13 +186,13 @@ window.onload = function() {
         .attr("value", (d) => d);
     });
 
-    csvFlow(GlobalCountry, GlobalFrom, GlobalTo);
+    loadCsvAndShowVis(GlobalCountry, GlobalFrom, GlobalTo);
     // Handle the search button click event
     function handleSearch() {
       var searchInput = document.getElementById("search-input");
       var query = searchInput.value;
       GlobalCountry = query;
-      csvFlow(query, GlobalFrom, GlobalTo);
+      loadCsvAndShowVis(query, GlobalFrom, GlobalTo);
     }
     // Function to handle year change
     function changeYear(direction) {
@@ -207,12 +207,12 @@ window.onload = function() {
           GlobalTo += yearsToShow;
         }
       }
-      csvFlow(GlobalCountry, GlobalFrom, GlobalTo);
+      loadCsvAndShowVis(GlobalCountry, GlobalFrom, GlobalTo);
 
     }
 
     // the main flow
-    function csvFlow(nation, from, to) {
+    function loadCsvAndShowVis(nation, from, to) {
       d3.csv("./data/goalscorers.csv").then(function (data) {
         // Update the title dynamically when used changes team or years
         var chartTitle = d3.select(".chart-title");
@@ -224,7 +224,7 @@ window.onload = function() {
         yearsTitle.textContent = "Between " + from + " - " + to;
 
         // Filter the data for the team nation and years between 2010 and 2022
-        function FilterScoredGoals(nation, from, to) {
+        function filterGoalsByNationAndYears(nation, from, to) {
           var filteredScoredData = data.filter(function (d) {
             var year = parseInt(d.date.split("/")[0]);
             return d.team === nation && year >= from && year <= to;
@@ -243,7 +243,7 @@ window.onload = function() {
         d3.select("svg").remove(); // Remove the existing SVG element
 
         // call the functions in order to get the filtered data.
-        var scoredGoalsData = FilterScoredGoals(nation, from, to);
+        var scoredGoalsData = filterGoalsByNationAndYears(nation, from, to);
 
         // test it
         console.log("Stacked Data:", scoredGoalsData);
@@ -421,7 +421,7 @@ window.onload = function() {
         var legend = svg
           .append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - 40) + ", 0)");
+          .attr("transform", "translate(" + (width - 45) + ", 0)");
 
         // Add legend entries
         var legendEntries = legend
