@@ -191,6 +191,7 @@ window.onload = function() {
     // Handle the search button click event
     function handleSearch() {
       var searchInput = document.getElementById("search-input");
+      searchInput.placeholder = "Select Nation";
       var query = searchInput.value;
       if(nations.includes(query)){
         GlobalCountry = query;
