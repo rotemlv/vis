@@ -250,7 +250,7 @@ window.onload = function() {
 
         // Set up the chart dimensions
         var margin = { top: 20, right: 40, bottom: 30, left: 60 };
-        var width = 1100 - margin.left - margin.right;
+        var width = 1000 - margin.left - margin.right;
         var height = 440 - margin.top - margin.bottom;
 
         var goals = [];
@@ -464,8 +464,10 @@ window.onload = function() {
         svg.selectAll(".tick text")
           .on("click", function (d) {
             // d is the year represented by the clicked label
-            console.log("Year clicked:", d.target.__data__);
-            // Here you can implement the logic to navigate to a different page or update the view
+            if (parseInt(d.target.__data__) >= GlobalFrom && parseInt(d.target.__data__) <= GlobalTo) {
+                          // Here you can implement the logic to navigate to a different page or update the view
+                          console.log("Year clicked:", d.target.__data__);
+
             var url =
               "teamTopPlayers.html" +
               "?year=" +
@@ -473,6 +475,8 @@ window.onload = function() {
               "&team=" +
               encodeURIComponent(GlobalCountry);
             window.location.href = url;
+            }
+
           });
       });
     }
